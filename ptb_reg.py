@@ -76,7 +76,7 @@ class PTBRegModel(object):
 		self.weight_decay = tf.Variable(tf.constant(0.0),name="weight_decay")		
 		l2_weight_decay = sum([tf.reduce_sum(tf.square(i)) for i in weight_vars])
 		
-		self.train_loss_reg += tf.maximum(0.0,self.l2_weight_decay)*l2_weight_decay
+		self.train_loss_reg = self.train_loss + tf.maximum(0.0,self.weight_decay)*l2_weight_decay
 		
 		lr = 0.01
 		optimizer = tf.train.AdamOptimizer(learning_rate=lr)
@@ -111,7 +111,7 @@ class PTBRegModel(object):
 		for (v1,v2) in zip(term1,term2):
 			reg_grad += tf.reduce_sum(v1*v2)
 			
-		gv = [(reg_grad_l2,self.weight_decay)]
+		gv = [(reg_grad,self.weight_decay)]
 			
 		self.reg_train_step = tf.train.GradientDescentOptimizer(1e-4).apply_gradients(gv)
 	
