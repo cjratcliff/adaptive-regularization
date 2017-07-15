@@ -76,7 +76,7 @@ class PTBRegModel(object):
 		self.weight_decay = tf.Variable(tf.constant(0.0),name="weight_decay")		
 		l2_weight_decay = sum([tf.reduce_sum(tf.square(i)) for i in weight_vars])
 		
-		self.train_loss_reg = self.train_loss + self.weight_decay*l2_weight_decay
+		self.train_loss_reg += tf.maximum(0.0,self.l2_weight_decay)*l2_weight_decay
 		
 		lr = 0.01
 		optimizer = tf.train.AdamOptimizer(learning_rate=lr)
